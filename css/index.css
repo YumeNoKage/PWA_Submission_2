@@ -1,0 +1,28 @@
+.p-img{
+    padding: 1rem;
+}
+.hidden{
+    display: none;
+}
+.icon_sty{
+    margin: 2rem;
+    position: fixed !important;
+    bottom: 10px !important;
+    right: 5rem !important;
+}
+.add-m{
+    margin-bottom: 8rem !important;
+}
+.icon-team{
+    width: 20px;
+    /* margin-left: -2rem; */
+    /* display: none; */
+}
+@media only screen and (max-width : 768px){
+    .icon_sty{
+        margin: 2rem;
+        position: fixed !important;
+        bottom: 10px !important;
+        right: 1rem !important;
+    } 
+}
