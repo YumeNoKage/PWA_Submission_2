@@ -7,7 +7,9 @@ let urlsToCache = [
     '/js/api.js',
     '/js/info_liga.js',
     '/js/materialize.min.js',
-    '/js/nav.js'
+	'/js/nav.js',
+	'/manifest.json',
+	'/soccer_line.png'
 ];
 
 self.addEventListener('install', function(event) {

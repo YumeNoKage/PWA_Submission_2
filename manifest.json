@@ -1,0 +1,16 @@
+{
+    "name": "PWA Submission 2",
+    "short_name": "PWA SUB 2",
+    "description": "Dicoding Class PWA Submission 2",
+    "start_url": "/index.html",
+    "display": "standalone",
+    "background_color": "#1976D2",
+    "theme_color": "#1976D2",
+    "icons": [
+        {
+            "src": "soccer_line.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
