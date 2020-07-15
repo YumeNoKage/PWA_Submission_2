@@ -3,6 +3,27 @@ function hiddenPage1(){
     document.getElementById("list_team").classList.remove("hidden")
 }
 function hiddenPage2(){
+    const ligaReplace = document.getElementById("liga-tabel")
+
+    const divTabelLiga = document.createElement("div");
+    divTabelLiga.setAttribute("class","liga");
+    divTabelLiga.setAttribute("id","liga-tabel");
+
+    const tableAll = document.createElement("table");
+    tableAll.setAttribute("class","white-text")
+    const tableHead = document.createElement("thead")
+    tableHead.setAttribute("id","header_table")
+    const tablebody = document.createElement("tbody");
+    tablebody.setAttribute("id","body_table")
+
+    tableAll.appendChild(tableHead);
+    tableAll.appendChild(tablebody);
+
+    divTabelLiga.appendChild(tableAll)
+    ligaReplace.remove();
+
+    document.getElementById("list_team").insertAdjacentElement("beforeend",divTabelLiga)
+
     document.getElementById("page_liga").classList.remove("hidden")
     document.getElementById("list_team").classList.add("hidden")
 }
@@ -17,7 +38,6 @@ function toTableTeam(nomor) {
     })
     .then(response => response.json())
     .then(data_team => {
-        console.log()
         data_team.standings
         .map( team_list => {
             if (nomor == 2001 && team_list.type === "TOTAL"){
@@ -92,19 +112,36 @@ function toTableTeam(nomor) {
                             <td>${team_data.goalDifference}</td>
                         </tr>
                     `;
-                    document.getElementById("body_table").insertAdjacentHTML("beforeend",team_list)
+                    document.getElementById("body_table").insertAdjacentHTML("beforeend",team_list);
                 })
                 }
             }
         })
-        // console.log(data_team.standings)
     })
+    .catch(err =>{
+        console.log(err)
+    })
+
+    const createDiv = document.createElement("a");
+    createDiv.setAttribute("class","btn-floating btn-large waves-effect waves-light blue darken-1 right icon_sty");
+    createDiv.setAttribute("id", nomor);
+    createDiv.setAttribute("onclick","btnToSaveArticle(\${nomor})")
+
+    const iconSave = document.createElement("i");
+    iconSave.setAttribute("class","material-icons");
+    const textSave = document.createTextNode("save");
+    iconSave.appendChild(textSave)
+
+    createDiv.appendChild(iconSave);
+    document.body.insertAdjacentElement("afterend",createDiv)
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-    // Tambakan baris kode di bawah
-        var save = document.getElementById("save");
-        save.onclick = function() {
-        console.log("Tombol FAB di klik.");
-        }
-});
+function btnToSaveArticle(idBtn){
+    document.addEventListener("DOMContentLoaded", function(idBtn) {
+        // Tambakan baris kode di bawah
+            var save = document.getElementById(idBtn);
+            save.onclick = function() {
+            console.log("Tombol FAB di klik.");
+            }
+    });
+}
