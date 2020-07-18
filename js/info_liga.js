@@ -1,8 +1,9 @@
 function hiddenPage1(){
     document.getElementById("page_liga").classList.add("hidden")
     document.getElementById("list_team").classList.remove("hidden")
+    // document.getElementById()
 }
-function hiddenPage2(){
+function hiddenPage2(idBtnBack){
     const ligaReplace = document.getElementById("liga-tabel")
 
     const divTabelLiga = document.createElement("div");
@@ -26,6 +27,9 @@ function hiddenPage2(){
 
     document.getElementById("page_liga").classList.remove("hidden")
     document.getElementById("list_team").classList.add("hidden")
+
+    document.getElementById(`btn-${idBtnBack}`).remove()
+    document.getElementById(`btn-back-${idBtnBack}`).remove()
 }
 
 function toTableTeam(nomor) {
@@ -124,8 +128,8 @@ function toTableTeam(nomor) {
 
     const createDiv = document.createElement("a");
     createDiv.setAttribute("class","btn-floating btn-large waves-effect waves-light blue darken-1 right icon_sty");
-    createDiv.setAttribute("id", nomor);
-    createDiv.setAttribute("onclick","btnToSaveArticle(\${nomor})")
+    createDiv.setAttribute("id", `btn-${nomor}`);
+    createDiv.setAttribute("onclick",`btnToSaveArticle(${nomor})`)
 
     const iconSave = document.createElement("i");
     iconSave.setAttribute("class","material-icons");
@@ -133,15 +137,124 @@ function toTableTeam(nomor) {
     iconSave.appendChild(textSave)
 
     createDiv.appendChild(iconSave);
-    document.body.insertAdjacentElement("afterend",createDiv)
+    document.body.insertAdjacentElement("afterend",createDiv);
+
+    // Add Back Icon
+
+    const btnDiv = document.createElement("div");
+    const btnBack = document.createElement("button");
+    const iconBtn = document.createElement("i");
+    const textBtnBack = document.createTextNode("Kembali");
+    const iconBtnName = document.createTextNode("arrow_back");
+
+    btnDiv.setAttribute("id",`btn-back-${nomor}`)
+
+    btnBack.setAttribute("class","btn waves-effect waves-light blue darken-1");
+    btnBack.setAttribute("onclick",`hiddenPage2(${nomor})`);
+
+    iconBtn.setAttribute("class","material-icons left");
+    iconBtn.appendChild(iconBtnName);
+    
+    btnBack.appendChild(iconBtn);
+    btnBack.appendChild(textBtnBack);
+
+    btnDiv.appendChild(btnBack);
+
+    document.getElementById("skor-title").insertAdjacentElement("beforeend",btnDiv);
 }
 
 function btnToSaveArticle(idBtn){
-    document.addEventListener("DOMContentLoaded", function(idBtn) {
-        // Tambakan baris kode di bawah
-            var save = document.getElementById(idBtn);
-            save.onclick = function() {
-            console.log("Tombol FAB di klik.");
-            }
-    });
+    console.log("Tombol FAB di klik.");
+    fetch(`https://api.football-data.org/v2/competitions/${idBtn}/standings`,{
+    method: 'GET',
+    mode: 'cors', 
+    headers: {
+        'X-Auth-Token': '22a7485a55124ebca755db8324323cc7',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        // const data_liga = `
+        // <div1 class="col s12 m6">
+        //     <div2 class="card grey darken-2" id=${data.competition.id}>
+        //         <div3 class="card-content">
+        //             <h5 class="blue-text darken-1">${data.competition.name}</h5>
+        //             <span class="white-text right">${data.competition.area.name}</span>
+        //             <hr>
+        //             <div4 season>
+        //                 <h6 class="white-text">Season</h6>
+        //                 <div5>
+        //                     <p class="white-text">Mulai &nbsp; &nbsp; : ${data.season.startDate}</p>
+        //                     <p class="white-text">Selesai &nbsp; : ${data.season.endDate}</p>
+        //                 </div>
+        //                 <div6 class="card-action">
+        //                     <button class="btn waves-effect waves-light blue darken-1" type="submit" onclick="toTableTeam(${data.competition.id}); hiddenPage1();">Baca Info</button>
+        //                 </div>
+        //             </div>
+        //         </div>
+        //     </div>
+        // </div>
+        // `;
+
+        const div1 = document.createElement("div")
+        div1.setAttribute("class","col s12 m6");
+        const div2 = document.createElement("div");
+        div2.setAttribute("class","card grey darken-2");
+        div2.setAttribute("id",`${data.competition.id}`);
+        const div3 = document.createElement("div");
+        div3.setAttribute("class","card-content");
+        const h5_1 = document.createElement("h5");
+        h5_1.setAttribute("class","blue-text darken-1");
+        const h5_text = document.createTextNode(`${data.competition.name}`);
+        h5_1.appendChild(h5_text);
+
+        const span_save = document.createElement("span");
+        span_save.setAttribute("class","white-text right");
+        const span_text = document.createTextNode(`${data.competition.area.name}`);
+        span_save.appendChild(span_text);
+        const hr_line = document.createElement("hr");
+
+        const div4 = document.createElement("div");
+        const h6_1 = document.createElement("h6");
+        h6_1.setAttribute("class","white-text");
+        const h6_text = document.createTextNode("Season");
+        h6_1.appendChild(h6_text);
+        const div5 = document.createElement("div");
+        // div_title.setAttribute("class", )
+        const p_1 = document.createElement("p");
+        p_1.setAttribute("class","white-text");
+        const p_1_text = document.createTextNode(`Mulai : ${data.season.startDate}`);
+        p_1.appendChild(p_1_text);
+        const p_2 = document.createElement("p");
+        p_2.setAttribute("class","white-text");
+        const p_2_text = document.createTextNode(`Selesai : ${data.season.endDate}`);
+        p_2.appendChild(p_2_text);
+        const div6 = document.createElement("div");
+        div6.setAttribute("class","card-action");
+        const btn_info = document.createElement("button");
+        btn_info.setAttribute("class","btn waves-effect waves-light blue darken-1");
+        btn_info.setAttribute("type","submit");
+        btn_info.setAttribute("onclick", `toTableTeam(${data.competition.id}); hiddenPage1();`)
+        const btn_info_text = document.createTextNode("Baca Info");
+        btn_info.appendChild(btn_info_text);
+        
+        div6.appendChild(btn_info);
+
+        div5.appendChild(p_1);
+        div5.appendChild(p_2);
+
+        div4.appendChild(h6_1);
+        div4.appendChild(div5);
+        div4.appendChild(div6);
+
+        div3.appendChild(h5_1);
+        div3.appendChild(span_save);
+        div3.appendChild(hr_line);
+        div3.appendChild(div4);
+
+        div2.appendChild(div3);
+        
+        div1.appendChild(div2)
+        document.getElementById("liga_save").insertAdjacentElement("beforeend",div1);
+    })
 }
