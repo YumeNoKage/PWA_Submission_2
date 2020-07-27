@@ -33,134 +33,135 @@ function hiddenPage2(idBtnBack){
 }
 
 function toTableTeam(nomor) {
-    fetch(`https://api.football-data.org/v2/competitions/${nomor}/standings`,{
-    method: 'GET',
-    mode: 'cors', 
-    headers: {
-        'X-Auth-Token': '22a7485a55124ebca755db8324323cc7',
-        }
-    })
-    .then(response => response.json())
-    .then(data_team => {
-        data_team.standings
-        .map( team_list => {
-            if (nomor == 2001 && team_list.type === "TOTAL"){
-                const group = `
-                    <td colspan="10">
-                        <h4>${team_list.group}</h3>
-                    </td>
-                    <tr>
-                        <th>No</th>
-                        <th>Team</th>
-                        <th>M</th>
-                        <th>M</th>
-                        <th>S</th>
-                        <th>K</th>
-                        <th>GM</th>
-                        <th>GK</th>
-                        <th>+/-</th>
-                        <th>P</th>
-                    </tr>
-                `
-                document.getElementById("body_table").insertAdjacentHTML("beforeend",group)                
-                team_list.table
-                    .forEach( team_data => {
-                    const url = team_data.team.crestUrl.replace(/^http:\/\//i, 'https://');
-                    const team = `
-                        <tr>
-                            <td>${team_data.position}</td>
-                            <td>${team_data.team.name}<i class="right"><img src="${url}" class="icon-team" alt="${team_data.team.name}"></img></i></td>
-                            <td>${team_data.playedGames}</td>
-                            <td>${team_data.won}</td>
-                            <td>${team_data.draw}</td>
-                            <td>${team_data.lost}</td>
-                            <td>${team_data.points}</td>
-                            <td>${team_data.goalsFor}</td>
-                            <td>${team_data.goalsAgainst}</td>
-                            <td>${team_data.goalDifference}</td>
-                        </tr>
-                    `;
-                    document.getElementById("body_table").insertAdjacentHTML("beforeend",team)
+    return new Promise(function(resolve, reject){
+        // const idParam = urlParams.get("id");
+        if ("caches" in window) {
+            caches.match(`https://api.football-data.org/v2/competitions/${nomor}/standings`)
+            .then(function(response){
+                if(response){
+                    response.json().then(function(data_team){
+                        data_team.standings
+                        .map( team_list => {
+                            if (nomor == 2001 && team_list.type === "TOTAL"){
+                                const group = `
+                                    <td colspan="10">
+                                        <h4>${team_list.group}</h3>
+                                    </td>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Team</th>
+                                        <th>M</th>
+                                        <th>M</th>
+                                        <th>S</th>
+                                        <th>K</th>
+                                        <th>GM</th>
+                                        <th>GK</th>
+                                        <th>+/-</th>
+                                        <th>P</th>
+                                    </tr>
+                                `
+                                document.getElementById("body_table").insertAdjacentHTML("beforeend",group)                
+                                team_list.table
+                                    .forEach( team_data => {
+                                    const url = team_data.team.crestUrl.replace(/^http:\/\//i, 'https://');
+                                    const team = `
+                                        <tr>
+                                            <td>${team_data.position}</td>
+                                            <td>${team_data.team.name}<i class="right"><img src="${url}" class="icon-team" alt="${team_data.team.name}"></img></i></td>
+                                            <td>${team_data.playedGames}</td>
+                                            <td>${team_data.won}</td>
+                                            <td>${team_data.draw}</td>
+                                            <td>${team_data.lost}</td>
+                                            <td>${team_data.points}</td>
+                                            <td>${team_data.goalsFor}</td>
+                                            <td>${team_data.goalsAgainst}</td>
+                                            <td>${team_data.goalDifference}</td>
+                                        </tr>
+                                    `;
+                                    document.getElementById("body_table").insertAdjacentHTML("beforeend",team)
+                                    })
+                                } else {
+                                if (team_list.type === "TOTAL"){
+                                    const group = `
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Team</th>
+                                            <th>M</th>
+                                            <th>M</th>
+                                            <th>S</th>
+                                            <th>K</th>
+                                            <th>GM</th>
+                                            <th>GK</th>
+                                            <th>+/-</th>
+                                            <th>P</th>
+                                        </tr>
+                                    `
+                                    document.getElementById("body_table").insertAdjacentHTML("beforeend",group)
+                                team_list.table
+                                .forEach( team_data => {
+                                    url = team_data.team.crestUrl.replace(/^http:\/\//i, 'https://');
+                                    const team_list = `
+                                        <tr>
+                                            <td>${team_data.position}</td>
+                                            <td>${team_data.team.name}<i class="right"><img src="${url}" class="icon-team" alt="${team_data.team.name}"></img></i></td>
+                                            <td>${team_data.playedGames}</td>
+                                            <td>${team_data.won}</td>
+                                            <td>${team_data.draw}</td>
+                                            <td>${team_data.lost}</td>
+                                            <td>${team_data.points}</td>
+                                            <td>${team_data.goalsFor}</td>
+                                            <td>${team_data.goalsAgainst}</td>
+                                            <td>${team_data.goalDifference}</td>
+                                        </tr>
+                                    `;
+                                    document.getElementById("body_table").insertAdjacentHTML("beforeend",team_list);
+                                })
+                                }
+                            }
+                        })
+                        resolve(data_team.standings)
                     })
-                } else {
-                if (team_list.type === "TOTAL"){
-                    const group = `
-                        <tr>
-                            <th>No</th>
-                            <th>Team</th>
-                            <th>M</th>
-                            <th>M</th>
-                            <th>S</th>
-                            <th>K</th>
-                            <th>GM</th>
-                            <th>GK</th>
-                            <th>+/-</th>
-                            <th>P</th>
-                        </tr>
-                    `
-                    document.getElementById("body_table").insertAdjacentHTML("beforeend",group)
-                team_list.table
-                .forEach( team_data => {
-                    url = team_data.team.crestUrl.replace(/^http:\/\//i, 'https://');
-                    const team_list = `
-                        <tr>
-                            <td>${team_data.position}</td>
-                            <td>${team_data.team.name}<i class="right"><img src="${url}" class="icon-team" alt="${team_data.team.name}"></img></i></td>
-                            <td>${team_data.playedGames}</td>
-                            <td>${team_data.won}</td>
-                            <td>${team_data.draw}</td>
-                            <td>${team_data.lost}</td>
-                            <td>${team_data.points}</td>
-                            <td>${team_data.goalsFor}</td>
-                            <td>${team_data.goalsAgainst}</td>
-                            <td>${team_data.goalDifference}</td>
-                        </tr>
-                    `;
-                    document.getElementById("body_table").insertAdjacentHTML("beforeend",team_list);
-                })
                 }
-            }
-        })
+            })
+        
+            const createDiv = document.createElement("a");
+            createDiv.setAttribute("class","btn-floating btn-large waves-effect waves-light blue darken-1 right icon_sty");
+            createDiv.setAttribute("id", `btn-${nomor}`);
+            createDiv.setAttribute("onclick",`saveLigaSkor(${nomor});btnToSaveArticle(${nomor})`)
+        
+            const iconSave = document.createElement("i");
+            iconSave.setAttribute("class","material-icons");
+            const textSave = document.createTextNode("save");
+            iconSave.appendChild(textSave)
+        
+            createDiv.appendChild(iconSave);
+            document.body.insertAdjacentElement("afterend",createDiv);
+        
+            // Add Back Icon
+        
+            const btnDiv = document.createElement("div");
+            const btnBack = document.createElement("button");
+            const iconBtn = document.createElement("i");
+            const textBtnBack = document.createTextNode("Kembali");
+            const iconBtnName = document.createTextNode("arrow_back");
+        
+            btnDiv.setAttribute("id",`btn-back-${nomor}`)
+        
+            btnBack.setAttribute("class","btn waves-effect waves-light blue darken-1");
+            btnBack.setAttribute("onclick",`hiddenPage2(${nomor})`);
+        
+            iconBtn.setAttribute("class","material-icons left");
+            iconBtn.appendChild(iconBtnName);
+            
+            btnBack.appendChild(iconBtn);
+            btnBack.appendChild(textBtnBack);
+        
+            btnDiv.appendChild(btnBack);
+        
+            document.getElementById("skor-title").insertAdjacentElement("beforeend",btnDiv);
+        }
+
     })
-    .catch(err =>{
-        console.log(err)
-    })
-
-    const createDiv = document.createElement("a");
-    createDiv.setAttribute("class","btn-floating btn-large waves-effect waves-light blue darken-1 right icon_sty");
-    createDiv.setAttribute("id", `btn-${nomor}`);
-    createDiv.setAttribute("onclick",`btnToSaveArticle(${nomor})`)
-
-    const iconSave = document.createElement("i");
-    iconSave.setAttribute("class","material-icons");
-    const textSave = document.createTextNode("save");
-    iconSave.appendChild(textSave)
-
-    createDiv.appendChild(iconSave);
-    document.body.insertAdjacentElement("afterend",createDiv);
-
-    // Add Back Icon
-
-    const btnDiv = document.createElement("div");
-    const btnBack = document.createElement("button");
-    const iconBtn = document.createElement("i");
-    const textBtnBack = document.createTextNode("Kembali");
-    const iconBtnName = document.createTextNode("arrow_back");
-
-    btnDiv.setAttribute("id",`btn-back-${nomor}`)
-
-    btnBack.setAttribute("class","btn waves-effect waves-light blue darken-1");
-    btnBack.setAttribute("onclick",`hiddenPage2(${nomor})`);
-
-    iconBtn.setAttribute("class","material-icons left");
-    iconBtn.appendChild(iconBtnName);
-    
-    btnBack.appendChild(iconBtn);
-    btnBack.appendChild(textBtnBack);
-
-    btnDiv.appendChild(btnBack);
-
-    document.getElementById("skor-title").insertAdjacentElement("beforeend",btnDiv);
 }
 
 function btnToSaveArticle(idBtn){
@@ -174,27 +175,6 @@ function btnToSaveArticle(idBtn){
     })
     .then(response => response.json())
     .then(data => {
-        // const data_liga = `
-        // <div1 class="col s12 m6">
-        //     <div2 class="card grey darken-2" id=${data.competition.id}>
-        //         <div3 class="card-content">
-        //             <h5 class="blue-text darken-1">${data.competition.name}</h5>
-        //             <span class="white-text right">${data.competition.area.name}</span>
-        //             <hr>
-        //             <div4 season>
-        //                 <h6 class="white-text">Season</h6>
-        //                 <div5>
-        //                     <p class="white-text">Mulai &nbsp; &nbsp; : ${data.season.startDate}</p>
-        //                     <p class="white-text">Selesai &nbsp; : ${data.season.endDate}</p>
-        //                 </div>
-        //                 <div6 class="card-action">
-        //                     <button class="btn waves-effect waves-light blue darken-1" type="submit" onclick="toTableTeam(${data.competition.id}); hiddenPage1();">Baca Info</button>
-        //                 </div>
-        //             </div>
-        //         </div>
-        //     </div>
-        // </div>
-        // `;
 
         const div1 = document.createElement("div")
         div1.setAttribute("class","col s12 m6");

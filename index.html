@@ -65,6 +65,8 @@
     <script src="./js/api.js"></script>
     <script src="./js/nav.js"></script>
     <script src="./js/info_liga.js"></script>
+    <script type="text/javascript" src="./js/idb.js"></script>
+    <script src="./js/db.js"></script>
     <script>
         if ("serviceWorker" in navigator) {
             window.addEventListener("load", function() {
@@ -81,10 +83,14 @@
             console.log("ServiceWorker belum didukung browser ini.");
         }
     </script>
-    <!-- <script>
+    <script>
         document.addEventListener("DOMContentLoaded", function(){
-            getArtikel
+            const item = toTableTeam();
+            item.then(function(skor){
+                saveLigaSkor(skor);
+            })
         })
-    </script> -->
+        console.log(new URLSearchParams(window.location.search))
+    </script>
 </body>
 </html>
